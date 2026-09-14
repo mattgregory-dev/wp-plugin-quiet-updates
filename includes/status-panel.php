@@ -96,33 +96,52 @@ function quiet_updates_core_status() {
  *
  * @param string $type Either 'plugin' or 'theme'.
  * @return array {
- *     @type bool $enabled Whether auto-updates are available for this type.
- *     @type int  $on      How many are set to update automatically.
- *     @type int  $total   How many are installed.
+ *     @type bool $enabled  Whether auto-updates are available for this type.
+ *     @type int  $on       How many are set to update automatically.
+ *     @type int  $total    How many could update automatically.
+ *     @type int  $no_source How many have no update source at all.
  * }
  */
 function quiet_updates_item_status( $type ) {
-	if ( 'plugin' === $type ) {
-		require_once ABSPATH . 'wp-admin/includes/plugin.php';
-
-		/*
-		 * get_plugins() deliberately, not a count that includes must-use
-		 * plugins and drop-ins: neither can be auto-updated or carries a
-		 * toggle, so counting them would report a total nobody can act on.
-		 * `wp plugin list` does include them, which makes the two disagree.
-		 */
-		$total = count( get_plugins() );
-		$on    = get_site_option( 'auto_update_plugins', array() );
-	} else {
-		$total = count( wp_get_themes() );
-		$on    = get_site_option( 'auto_update_themes', array() );
-	}
+	$on        = get_site_option( 'plugin' === $type ? 'auto_update_plugins' : 'auto_update_themes', array() );
+	$installed = quiet_updates_installed_slugs( $type );
+	$eligible  = quiet_updates_updatable_slugs( $type, $installed );
 
 	return array(
-		'enabled' => wp_is_auto_update_enabled_for_type( $type ),
-		'on'      => count( array_intersect( (array) $on, quiet_updates_installed_slugs( $type ) ) ),
-		'total'   => $total,
+		'enabled'   => wp_is_auto_update_enabled_for_type( $type ),
+		'on'        => count( array_intersect( (array) $on, $eligible ) ),
+		'total'     => count( $eligible ),
+		'no_source' => count( $installed ) - count( $eligible ),
 	);
+}
+
+/**
+ * The installed items WordPress has an update source for.
+ *
+ * Something installed by hand -- a zip from elsewhere, a plugin in development
+ * -- appears in no update transient, and its row on the Plugins screen offers
+ * no auto-update control at all. Counting those in the denominator makes this
+ * panel disagree with that screen by exactly their number.
+ *
+ * @param string   $type      Either 'plugin' or 'theme'.
+ * @param string[] $installed Everything installed of that type.
+ * @return string[]
+ */
+function quiet_updates_updatable_slugs( $type, $installed ) {
+	$transient = get_site_transient( 'plugin' === $type ? 'update_plugins' : 'update_themes' );
+
+	$known = array_merge(
+		isset( $transient->response ) ? array_keys( (array) $transient->response ) : array(),
+		isset( $transient->no_update ) ? array_keys( (array) $transient->no_update ) : array()
+	);
+
+	// An empty transient means WordPress has not checked yet, not that nothing
+	// can update. Reporting zero there would be worse than counting everything.
+	if ( ! $known ) {
+		return $installed;
+	}
+
+	return array_values( array_intersect( $installed, $known ) );
 }
 
 /**
@@ -182,20 +201,35 @@ function quiet_updates_item_sentence( $type, $status ) {
 	}
 
 	if ( 'plugin' === $type ) {
-		return sprintf(
-			/* translators: 1: Number set to auto-update, 2: Number installed. */
+		$sentence = sprintf(
+			/* translators: 1: Number set to auto-update, 2: Number that could. */
 			__( 'Plugins: %1$d of %2$d update automatically.', 'quiet-updates' ),
+			$status['on'],
+			$status['total']
+		);
+	} else {
+		$sentence = sprintf(
+			/* translators: 1: Number set to auto-update, 2: Number that could. */
+			__( 'Themes: %1$d of %2$d update automatically.', 'quiet-updates' ),
 			$status['on'],
 			$status['total']
 		);
 	}
 
-	return sprintf(
-		/* translators: 1: Number set to auto-update, 2: Number installed. */
-		__( 'Themes: %1$d of %2$d update automatically.', 'quiet-updates' ),
-		$status['on'],
-		$status['total']
-	);
+	if ( $status['no_source'] > 0 ) {
+		$sentence .= ' ' . sprintf(
+			/* translators: %d: How many were installed by hand. */
+			_n(
+				'%d more was installed by hand, so WordPress cannot update it.',
+				'%d more were installed by hand, so WordPress cannot update them.',
+				$status['no_source'],
+				'quiet-updates'
+			),
+			$status['no_source']
+		);
+	}
+
+	return $sentence;
 }
 
 /**

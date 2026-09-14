@@ -226,7 +226,7 @@ function quiet_updates_render_status_panel() {
 
 	/*
 	 * The card draws its own background and border rather than borrowing core's
-	 * .card, whose padding and width differ between admin colour schemes and
+	 * .card, whose padding and width differ between admin color schemes and
 	 * WordPress versions.
 	 */
 	echo '<div class="quiet-updates-status">';
@@ -234,7 +234,7 @@ function quiet_updates_render_status_panel() {
 
 	/*
 	 * A locked line drops its link rather than keeping it: the option on that
-	 * screen is greyed out or absent, so sending someone there to change
+	 * screen is grayed out or absent, so sending someone there to change
 	 * something they cannot change just relocates the confusion.
 	 */
 	quiet_updates_status_line(

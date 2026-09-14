@@ -18,7 +18,7 @@
 }
 
 .quiet-updates-intro {
-	margin: 0 0 1.5rem;
+	margin: 1rem 0 1.5rem;
 }
 
 .quiet-updates-status {
@@ -63,8 +63,20 @@
 	margin-bottom: 0 !important;
 }
 
-.quiet-updates-screen .description {
-	margin: 0.25rem 0 0;
+/*
+ * Two different jobs share the .description class, so they are separated by
+ * where they sit rather than by a second class name.
+ *
+ * A description that closes a section is the last thing before the next
+ * heading, and needs to read as the end of what came before.
+ */
+.quiet-updates-screen p.description {
+	margin: 0.25rem 0 2rem;
+}
+
+/* One inside a row belongs to the control above it. */
+.quiet-updates-screen .form-table td p.description {
+	margin: 1rem 0 0;
 }
 
 /*
@@ -75,5 +87,24 @@
 @media screen and (max-width: 782px) {
 	.quiet-updates-status {
 		padding: 1rem 1.25rem;
+	}
+
+	/*
+	 * Core stacks th and td into blocks at this width but keeps the padding it
+	 * uses for side-by-side cells, so each row's label sits directly on its own
+	 * controls and the groups run together. These restate the padding for a
+	 * stacked reading: a little under the label, a clear gap under the group.
+	 */
+	.quiet-updates-screen .form-table th {
+		padding: 0 0 0.75rem;
+	}
+
+	.quiet-updates-screen .form-table td {
+		margin-bottom: 0;
+		padding: 0 0 1.75rem;
+	}
+
+	.quiet-updates-screen .form-table tr:last-child td {
+		padding-bottom: 0.5rem;
 	}
 }

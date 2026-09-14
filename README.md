@@ -27,6 +27,16 @@ the automatic-update debug email.
 Update *policy* is untouched. Which updates install, and whether they install
 automatically, stays where you set it.
 
+## What it shows you
+
+At the top of the settings screen, a read-only summary of what your site
+actually does with automatic updates: whether core installs every release, only
+minor and security ones, or nothing, plus how many plugins and themes update
+themselves. When a host or another plugin controls core updates, it says so and
+offers no link, because the setting would be unchangeable on the other end.
+
+Nothing in that panel changes a setting. WordPress owns the switch.
+
 ## Installing
 
 Download the zip from [Releases](https://github.com/mattgregory-dev/quiet-updates/releases)

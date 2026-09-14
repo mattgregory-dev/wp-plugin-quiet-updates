@@ -11,13 +11,37 @@
  */
 
 /* The reading measure, applied once to everything that holds prose. */
-.quiet-updates-screen p {
+.quiet-updates-screen p,
+.quiet-updates-status {
 	max-width: 37.5rem;
 	line-height: 1.6;
 }
 
 .quiet-updates-intro {
 	margin: 0 0 1.5rem;
+}
+
+.quiet-updates-status {
+	margin: 0 0 2rem;
+	padding: 1.25rem 1.75rem;
+	background: #fff;
+	border: 1px solid #c3c4c7;
+	border-radius: 4px;
+	box-shadow: 0 1px 1px rgb(0 0 0 / 4%);
+}
+
+.quiet-updates-status h2 {
+	margin: 0 0 0.75rem;
+	font-size: 0.9375rem;
+	color: #1d2327;
+}
+
+.quiet-updates-status p {
+	margin: 0 0 0.5rem;
+}
+
+.quiet-updates-status p:last-child {
+	margin-bottom: 0;
 }
 
 /* One rhythm for every stacked choice, with the last row sitting flush. */
@@ -32,4 +56,15 @@
 
 .quiet-updates-screen .description {
 	margin: 0.25rem 0 0;
+}
+
+/*
+ * WordPress switches the admin to its touch layout at 782px, where form-table
+ * rows stack and the side padding is already tighter. The card's own padding
+ * comes in to match rather than sitting proud of everything around it.
+ */
+@media screen and (max-width: 782px) {
+	.quiet-updates-status {
+		padding: 1rem 1.25rem;
+	}
 }

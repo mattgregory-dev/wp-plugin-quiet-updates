@@ -4,7 +4,7 @@ Tags: updates, email, notifications, maintenance
 Requires at least: 6.9
 Tested up to: 7.1
 Requires PHP: 7.4
-Stable tag: 3.0.0
+Stable tag: 3.1.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -70,6 +70,12 @@ screen.
 
 == Changelog ==
 
+= 3.1.0 =
+* Add a read-only panel showing what the site currently does with automatic
+  updates, since that decides whether silencing successes makes sense.
+* Say so plainly when a host or another plugin controls core updates, and drop
+  the link in that case rather than sending you to a screen you cannot change.
+
 = 3.0.0 =
 * Add a settings screen. Every category is now chosen rather than assumed.
 * Nothing is silenced until configured; a fresh activation changes no mail.
@@ -86,6 +92,10 @@ screen.
 * Silence plugin, theme and debug update email.
 
 == Upgrade Notice ==
+
+= 3.1.0 =
+Adds a status panel at the top of the settings screen. Nothing else changes,
+and no setting of yours is touched.
 
 = 3.0.0 =
 Settings are new, and everything starts switched off. Version 2.0.0 acted on

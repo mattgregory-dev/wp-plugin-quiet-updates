@@ -206,6 +206,7 @@ function quiet_updates_render_page() {
 	<div class="wrap quiet-updates-screen">
 		<h1><?php echo esc_html( get_admin_page_title() ); ?></h1>
 		<p class="quiet-updates-intro"><?php esc_html_e( 'This plugin turns off the update emails you do not need and keeps the ones you do. Nothing changes until you pick something below. It only affects email. It never changes which updates install.', 'quiet-updates' ); ?></p>
+		<?php quiet_updates_render_status_panel(); ?>
 		<form action="options.php" method="post">
 			<?php
 			settings_fields( 'quiet_updates' );

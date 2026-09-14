@@ -44,14 +44,23 @@
 	margin-bottom: 0;
 }
 
-/* One rhythm for every stacked choice, with the last row sitting flush. */
-.quiet-updates-screen fieldset label {
+/*
+ * One rhythm for every stacked choice, with the last row sitting flush.
+ *
+ * Core sets `.form-table td fieldset label { display: inline-block; margin:
+ * 0.35em 0 0.5em !important }` in wp-admin/css/forms.css, which runs the three
+ * options together on one line. Two things are needed to beat it, and both look
+ * like mistakes without this note: the selector carries `.form-table td` purely
+ * to out-specify core's, and the margin carries `!important` because core's own
+ * declaration does, so nothing else can win.
+ */
+.quiet-updates-screen .form-table td fieldset label {
 	display: block;
-	margin: 0 0 0.5rem;
+	margin: 0 0 0.5rem !important;
 }
 
-.quiet-updates-screen fieldset label:last-child {
-	margin-bottom: 0;
+.quiet-updates-screen .form-table td fieldset label:last-child {
+	margin-bottom: 0 !important;
 }
 
 .quiet-updates-screen .description {

@@ -21,6 +21,11 @@
 
 defined( 'ABSPATH' ) || exit;
 
+const QUIET_UPDATES_VERSION = '3.0.0';
+
+// plugins_url() needs a file inside the plugin; __FILE__ here is that file.
+define( 'QUIET_UPDATES_FILE', __FILE__ );
+
 require_once plugin_dir_path( __FILE__ ) . 'includes/settings.php';
 require_once plugin_dir_path( __FILE__ ) . 'includes/filters.php';
 

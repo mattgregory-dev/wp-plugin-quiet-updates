@@ -12,11 +12,12 @@
 
 defined( 'ABSPATH' ) || exit;
 
+
 /**
  * Add the options page.
  */
 function quiet_updates_add_page() {
-	add_options_page(
+	$GLOBALS['quiet_updates_screen'] = add_options_page(
 		__( 'Quiet Updates', 'quiet-updates' ),
 		__( 'Quiet Updates', 'quiet-updates' ),
 		'manage_options',
@@ -25,6 +26,28 @@ function quiet_updates_add_page() {
 	);
 }
 add_action( 'admin_menu', 'quiet_updates_add_page' );
+
+/**
+ * Load the screen's stylesheet, on the screen and nowhere else.
+ *
+ * The hook suffix is taken from what add_options_page() returned rather than
+ * written out by hand: the two would drift the moment the page slug changed.
+ *
+ * @param string $hook Current admin page hook suffix.
+ */
+function quiet_updates_enqueue_admin_css( $hook ) {
+	if ( empty( $GLOBALS['quiet_updates_screen'] ) || $hook !== $GLOBALS['quiet_updates_screen'] ) {
+		return;
+	}
+
+	wp_enqueue_style(
+		'quiet-updates-admin',
+		plugins_url( 'assets/admin.css', QUIET_UPDATES_FILE ),
+		array(),
+		QUIET_UPDATES_VERSION
+	);
+}
+add_action( 'admin_enqueue_scripts', 'quiet_updates_enqueue_admin_css' );
 
 /**
  * Sections and fields.
@@ -41,7 +64,7 @@ function quiet_updates_add_fields() {
 			 * one of them: it describes the last option, which any of the three
 			 * can be set to.
 			 */
-			'after_section' => '<p class="description" style="max-width:46em"><strong>'
+			'after_section' => '<p class="description"><strong>'
 				. esc_html__( 'Heads up:', 'quiet-updates' ) . '</strong> '
 				. esc_html__( '"Silence all of them" means a failed update comes and goes without a word. Only pick that if you check your sites another way.', 'quiet-updates' )
 				. '</p>',
@@ -111,14 +134,14 @@ add_action( 'admin_init', 'quiet_updates_add_fields' );
  * Intro text for the update-results section.
  */
 function quiet_updates_results_intro() {
-	echo '<p style="max-width:46em">' . esc_html__( 'When WordPress installs an update for you, it emails to say how it went, even when nothing went wrong. Those "all good" emails pile up without telling you much. Pick "Silence successes" to stop them but still hear about failures.', 'quiet-updates' ) . '</p>';
+	echo '<p>' . esc_html__( 'When WordPress installs an update for you, it emails to say how it went, even when nothing went wrong. Those "all good" emails pile up without telling you much. Pick "Silence successes" to stop them but still hear about failures.', 'quiet-updates' ) . '</p>';
 }
 
 /**
  * Intro text for the notices section.
  */
 function quiet_updates_notices_intro() {
-	echo '<p style="max-width:46em">' . esc_html__( 'These are not about updates that already ran. They are heads-ups and reminders WordPress sends on its own, like telling you an update is waiting.', 'quiet-updates' ) . '</p>';
+	echo '<p>' . esc_html__( 'These are not about updates that already ran. They are heads-ups and reminders WordPress sends on its own, like telling you an update is waiting.', 'quiet-updates' ) . '</p>';
 }
 
 /**
@@ -133,7 +156,7 @@ function quiet_updates_render_modes( $args ) {
 	echo '<fieldset>';
 	foreach ( quiet_updates_modes() as $value => $label ) {
 		printf(
-			'<label style="display:block;margin-bottom:.35em"><input type="radio" name="%1$s[%2$s]" value="%3$s"%4$s> %5$s',
+			'<label><input type="radio" name="%1$s[%2$s]" value="%3$s"%4$s> %5$s',
 			esc_attr( QUIET_UPDATES_OPTION ),
 			esc_attr( $key ),
 			esc_attr( $value ),
@@ -166,7 +189,7 @@ function quiet_updates_render_toggle( $args ) {
 
 	if ( ! empty( $args['helper'] ) ) {
 		printf(
-			'<p class="description" style="max-width:46em">%s</p>',
+			'<p class="description">%s</p>',
 			esc_html( $args['helper'] )
 		);
 	}
@@ -180,9 +203,9 @@ function quiet_updates_render_page() {
 		return;
 	}
 	?>
-	<div class="wrap">
+	<div class="wrap quiet-updates-screen">
 		<h1><?php echo esc_html( get_admin_page_title() ); ?></h1>
-		<p style="max-width:46em"><?php esc_html_e( 'This plugin turns off the update emails you do not need and keeps the ones you do. Nothing changes until you pick something below. It only affects email. It never changes which updates install.', 'quiet-updates' ); ?></p>
+		<p class="quiet-updates-intro"><?php esc_html_e( 'This plugin turns off the update emails you do not need and keeps the ones you do. Nothing changes until you pick something below. It only affects email. It never changes which updates install.', 'quiet-updates' ); ?></p>
 		<form action="options.php" method="post">
 			<?php
 			settings_fields( 'quiet_updates' );

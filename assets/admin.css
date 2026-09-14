@@ -1,0 +1,35 @@
+/*
+ * Quiet Updates — settings screen.
+ *
+ * Loaded only on this plugin's own settings page.
+ *
+ * Units: spacing and measure in rem, because em in wp-admin resolves against
+ * each element's own font-size (13px body copy, 15px headings), so one em value
+ * renders as a different distance in each place it is used. Border width,
+ * radius and shadow offsets stay in px: they are fixed graphical constants and
+ * should not grow with the root size.
+ */
+
+/* The reading measure, applied once to everything that holds prose. */
+.quiet-updates-screen p {
+	max-width: 37.5rem;
+	line-height: 1.6;
+}
+
+.quiet-updates-intro {
+	margin: 0 0 1.5rem;
+}
+
+/* One rhythm for every stacked choice, with the last row sitting flush. */
+.quiet-updates-screen fieldset label {
+	display: block;
+	margin: 0 0 0.5rem;
+}
+
+.quiet-updates-screen fieldset label:last-child {
+	margin-bottom: 0;
+}
+
+.quiet-updates-screen .description {
+	margin: 0.25rem 0 0;
+}

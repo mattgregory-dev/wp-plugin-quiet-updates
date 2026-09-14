@@ -6,7 +6,7 @@
  * Version:           3.1.0
  * Requires at least: 6.9
  * Requires PHP:      7.4
- * Author:            mattgregory-dev
+ * Author:            Matthew Gregory
  * License:           GPLv2 or later
  * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
  * Text Domain:       quiet-updates

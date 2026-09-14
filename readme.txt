@@ -1,5 +1,5 @@
 === Quiet Update Emails ===
-Contributors: mattgregorydev
+Contributors: matthewgregory
 Tags: updates, email, notifications, maintenance
 Requires at least: 6.9
 Tested up to: 7.1
@@ -42,6 +42,14 @@ Three separate toggles, each off by default:
 * The email announcing that a new version of WordPress is available.
 * The admin-email verification screen that interrupts a login every six months.
 * The automatic-update debug email, which only goes out on beta and test builds.
+
+== Installation ==
+
+1. Upload the plugin folder to `/wp-content/plugins/`, or install the zip
+   through Plugins › Add New › Upload Plugin.
+2. Activate it through the Plugins screen.
+3. Visit Settings › Quiet Updates and choose what to silence. Until you
+   do, the plugin changes no mail at all.
 
 == Frequently Asked Questions ==
 

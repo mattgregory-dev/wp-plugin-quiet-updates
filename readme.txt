@@ -4,7 +4,7 @@ Tags: updates, email, notifications, maintenance
 Requires at least: 6.9
 Tested up to: 7.1
 Requires PHP: 7.4
-Stable tag: 3.1.0
+Stable tag: 3.1.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -78,6 +78,11 @@ screen.
 
 == Changelog ==
 
+= 3.1.1 =
+* Count only the plugins and themes WordPress has an update source for. A
+  manually installed one has no auto-update control at all, and counting it
+  made the panel disagree with the Plugins screen.
+
 = 3.1.0 =
 * Add a read-only panel showing what the site currently does with automatic
   updates, since that decides whether silencing successes makes sense.
@@ -100,6 +105,9 @@ screen.
 * Silence plugin, theme and debug update email.
 
 == Upgrade Notice ==
+
+= 3.1.1 =
+Corrects the plugin and theme counts in the status panel. No settings change.
 
 = 3.1.0 =
 Adds a status panel at the top of the settings screen. Nothing else changes,

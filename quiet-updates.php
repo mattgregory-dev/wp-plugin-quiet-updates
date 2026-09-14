@@ -3,7 +3,7 @@
  * Plugin Name:       Quiet Update Emails
  * Plugin URI:        https://github.com/mattgregory-dev/quiet-updates
  * Description:       Silences the routine WordPress update mail you choose to silence, and keeps the rest.
- * Version:           3.1.0
+ * Version:           3.1.1
  * Requires at least: 6.9
  * Requires PHP:      7.4
  * Author:            Matthew Gregory
@@ -21,7 +21,7 @@
 
 defined( 'ABSPATH' ) || exit;
 
-const QUIET_UPDATES_VERSION = '3.1.0';
+const QUIET_UPDATES_VERSION = '3.1.1';
 
 // plugins_url() needs a file inside the plugin; __FILE__ here is that file.
 define( 'QUIET_UPDATES_FILE', __FILE__ );

@@ -82,6 +82,8 @@ screen.
 * Count only the plugins and themes WordPress has an update source for. A
   manually installed one has no auto-update control at all, and counting it
   made the panel disagree with the Plugins screen.
+* Correct the plugin and repository links, which pointed at a repository name
+  that does not exist.
 
 = 3.1.0 =
 * Add a read-only panel showing what the site currently does with automatic

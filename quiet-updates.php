@@ -1,7 +1,7 @@
 <?php
 /**
  * Plugin Name:       Quiet Update Emails
- * Plugin URI:        https://github.com/mattgregory-dev/quiet-updates
+ * Plugin URI:        https://github.com/mattgregory-dev/wp-plugin-quiet-updates
  * Description:       Silences the routine WordPress update mail you choose to silence, and keeps the rest.
  * Version:           3.1.1
  * Requires at least: 6.9

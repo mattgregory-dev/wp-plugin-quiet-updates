@@ -39,7 +39,7 @@ Nothing in that panel changes a setting. WordPress owns the switch.
 
 ## Installing
 
-Download the zip from [Releases](https://github.com/mattgregory-dev/quiet-updates/releases)
+Download the zip from [Releases](https://github.com/mattgregory-dev/wp-plugin-quiet-updates/releases)
 and install it through **Plugins → Add New → Upload Plugin**.
 
 Do not use GitHub's green "Download ZIP" button. It produces a folder named

@@ -25,9 +25,9 @@ const QUIET_UPDATES_RECOMMENDED = 'successes_only';
  */
 function quiet_updates_modes() {
 	return array(
-		'send_all'       => __( 'Send every email (WordPress default)', 'quiet-updates' ),
-		'successes_only' => __( 'Silence successes, still send failures', 'quiet-updates' ),
-		'silence_all'    => __( 'Silence every email, failures included', 'quiet-updates' ),
+		'send_all'       => __( 'Send every email (default)', 'quiet-updates' ),
+		'successes_only' => __( 'Silence the routine ones, still email me if an update fails', 'quiet-updates' ),
+		'silence_all'    => __( 'Silence all of them, even failures', 'quiet-updates' ),
 	);
 }
 

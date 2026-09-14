@@ -2,6 +2,11 @@
 /**
  * Settings > Quiet Updates.
  *
+ * Copy follows the settings-panel copy document: the label says what the
+ * setting does, the helper text adds the one thing someone might not have
+ * thought of, and the warning about losing failure mail sits next to the option
+ * that causes it rather than in the intro.
+ *
  * @package QuietUpdates
  */
 
@@ -27,9 +32,20 @@ add_action( 'admin_menu', 'quiet_updates_add_page' );
 function quiet_updates_add_fields() {
 	add_settings_section(
 		'quiet_updates_results',
-		__( 'Update result emails', 'quiet-updates' ),
+		__( 'Emails after an update installs', 'quiet-updates' ),
 		'quiet_updates_results_intro',
-		'quiet-updates'
+		'quiet-updates',
+		array(
+			/*
+			 * The warning belongs after all three categories rather than inside
+			 * one of them: it describes the last option, which any of the three
+			 * can be set to.
+			 */
+			'after_section' => '<p class="description" style="max-width:46em"><strong>'
+				. esc_html__( 'Heads up:', 'quiet-updates' ) . '</strong> '
+				. esc_html__( '"Silence all of them" means a failed update comes and goes without a word. Only pick that if you check your sites another way.', 'quiet-updates' )
+				. '</p>',
+		)
 	);
 
 	$categories = array(
@@ -51,26 +67,26 @@ function quiet_updates_add_fields() {
 
 	add_settings_section(
 		'quiet_updates_notices',
-		__( 'Notices and nags', 'quiet-updates' ),
-		'__return_false',
+		__( 'Other update emails', 'quiet-updates' ),
+		'quiet_updates_notices_intro',
 		'quiet-updates'
 	);
 
 	$toggles = array(
 		'version_nudge'     => array(
 			__( 'New version available', 'quiet-updates' ),
-			__( 'Silence the email announcing that a new version of WordPress is available. The Dashboard and Updates screen still show it.', 'quiet-updates' ),
-			__( 'Worth knowing: big WordPress updates do not install themselves, and this email is usually how you find out one is waiting. Turn it off and you will need to check the Updates screen yourself.', 'quiet-updates' ),
+			__( 'Silence the "a new version of WordPress is available" email.', 'quiet-updates' ),
+			__( 'You will still see it on your Dashboard and Updates screen. Just know this email is often how people find out an update is waiting, since big WordPress updates do not install themselves unless you have set that up. Turn it off and you will need to check the Updates screen yourself.', 'quiet-updates' ),
 		),
 		'admin_email_check' => array(
 			__( 'Admin email confirmation', 'quiet-updates' ),
-			__( 'Stop the verification screen that interrupts a login every six months. The address stays editable under Settings › General.', 'quiet-updates' ),
-			__( 'Worth knowing: that screen is WordPress checking that your admin email address still works. If you turn it off and the address later goes dead, nothing will tell you. That address is where password resets go, and where the failure emails above are sent.', 'quiet-updates' ),
+			__( 'Stop the screen that interrupts your login every six months to confirm your admin email.', 'quiet-updates' ),
+			__( 'That screen is WordPress double-checking your admin address still works. Turn it off and, if that address ever stops working, nothing will warn you. It is the address your password resets and update-failure emails go to, so it is worth keeping reachable.', 'quiet-updates' ),
 		),
 		'debug_email'       => array(
 			__( 'Debug email', 'quiet-updates' ),
 			__( 'Silence the automatic-update debug email.', 'quiet-updates' ),
-			__( 'Worth knowing: this email only goes out on beta and test builds of WordPress. On a normal site, no email is sent out, and this setting has no effect.', 'quiet-updates' ),
+			__( 'This one only goes out on beta and test builds of WordPress. On a normal live site nothing is sent, so this setting does nothing unless you are running a test build.', 'quiet-updates' ),
 		),
 	);
 
@@ -82,9 +98,9 @@ function quiet_updates_add_fields() {
 			'quiet-updates',
 			'quiet_updates_notices',
 			array(
-				'key'         => $key,
-				'label'       => $parts[1],
-				'implication' => $parts[2],
+				'key'    => $key,
+				'label'  => $parts[1],
+				'helper' => $parts[2],
 			)
 		);
 	}
@@ -95,7 +111,14 @@ add_action( 'admin_init', 'quiet_updates_add_fields' );
  * Intro text for the update-results section.
  */
 function quiet_updates_results_intro() {
-	echo '<p style="max-width:46em">' . esc_html__( 'WordPress emails you after every automatic update, even when everything went fine. "Silence successes" is the one to pick: you stop hearing about the routine ones, and you still get told when an update fails, including the serious kind where the site might be down. "Silence every email" drops those warnings too, so a failed update would come and go without a word.', 'quiet-updates' ) . '</p>';
+	echo '<p style="max-width:46em">' . esc_html__( 'When WordPress installs an update for you, it emails to say how it went, even when nothing went wrong. Those "all good" emails pile up without telling you much. Pick "Silence successes" to stop them but still hear about failures.', 'quiet-updates' ) . '</p>';
+}
+
+/**
+ * Intro text for the notices section.
+ */
+function quiet_updates_notices_intro() {
+	echo '<p style="max-width:46em">' . esc_html__( 'These are not about updates that already ran. They are heads-ups and reminders WordPress sends on its own, like telling you an update is waiting.', 'quiet-updates' ) . '</p>';
 }
 
 /**
@@ -119,7 +142,7 @@ function quiet_updates_render_modes( $args ) {
 		);
 
 		if ( QUIET_UPDATES_RECOMMENDED === $value ) {
-			echo ' <span class="description"><strong>' . esc_html__( 'Recommended', 'quiet-updates' ) . '</strong></span>';
+			echo ' <span class="description"><strong>' . esc_html__( '(recommended)', 'quiet-updates' ) . '</strong></span>';
 		}
 
 		echo '</label>';
@@ -128,9 +151,9 @@ function quiet_updates_render_modes( $args ) {
 }
 
 /**
- * Checkbox for one toggle.
+ * Checkbox and helper text for one toggle.
  *
- * @param array $args Field arguments; expects 'key' and 'label'.
+ * @param array $args Field arguments; expects 'key', 'label' and 'helper'.
  */
 function quiet_updates_render_toggle( $args ) {
 	printf(
@@ -141,10 +164,10 @@ function quiet_updates_render_toggle( $args ) {
 		esc_html( $args['label'] )
 	);
 
-	if ( ! empty( $args['implication'] ) ) {
+	if ( ! empty( $args['helper'] ) ) {
 		printf(
 			'<p class="description" style="max-width:46em">%s</p>',
-			esc_html( $args['implication'] )
+			esc_html( $args['helper'] )
 		);
 	}
 }
@@ -159,7 +182,7 @@ function quiet_updates_render_page() {
 	?>
 	<div class="wrap">
 		<h1><?php echo esc_html( get_admin_page_title() ); ?></h1>
-		<p><?php esc_html_e( 'Nothing is silenced until you turn it on below. This only changes which emails you get. It does not change which updates install.', 'quiet-updates' ); ?></p>
+		<p style="max-width:46em"><?php esc_html_e( 'This plugin turns off the update emails you do not need and keeps the ones you do. Nothing changes until you pick something below. It only affects email. It never changes which updates install.', 'quiet-updates' ); ?></p>
 		<form action="options.php" method="post">
 			<?php
 			settings_fields( 'quiet_updates' );

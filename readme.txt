@@ -1,14 +1,14 @@
 === Quiet Update Emails ===
 Contributors: mattgregorydev
 Tags: updates, email, notifications, maintenance
-Requires at least: 5.5
+Requires at least: 6.9
 Tested up to: 7.1
 Requires PHP: 7.4
-Stable tag: 2.0.0
+Stable tag: 3.0.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
-Silences routine WordPress update mail and the periodic admin-email check, while letting failures through.
+Silences the routine WordPress update mail you choose to silence, and keeps the rest.
 
 == Description ==
 
@@ -16,54 +16,78 @@ WordPress emails after every automatic update, whether or not anything went
 wrong. Across a handful of sites that is enough mail to stop being read, which
 is what makes the one that matters easy to miss.
 
-This plugin keeps the failures and drops the rest, so the inbox goes back to
-meaning something needs attention.
+This plugin silences the categories you choose and leaves the others alone.
 
-**Silenced**
+**Nothing is silenced until you choose it.** A fresh activation changes no mail
+at all; everything is configured under Settings › Quiet Updates.
 
-* Core auto-update success
-* Plugin and theme auto-update runs where every item succeeded
-* The "WordPress x.y is available" nudge
-* The automatic-update debug email
-* The admin-email verification screen shown at login every six months
+= Update result emails =
 
-**Still sent**
+Core, plugin and theme update mail each get the same three-way choice:
 
-* Core auto-update failures
-* Core auto-update *critical* failures, where the site may be down
-* Plugin or theme runs where at least one item failed
+* **Send every email** — WordPress behaves normally.
+* **Silence successes, still send failures** — the recommended setting. The
+  routine "everything updated fine" mail stops; anything reporting a failure
+  still arrives, including a critical core failure where the site may be down.
+* **Silence every email** — failures included. Offered because it is your site,
+  not because it is a good idea.
 
-Nothing about update *policy* changes. Which updates install, and whether they
-install automatically, stay where you set them.
+Plugin and theme mail arrives as one digest covering a whole run, so "silence
+successes" sends the digest whenever any item in the run failed.
 
-There are no settings.
+= Notices and nags =
+
+Three separate toggles, each off by default:
+
+* The email announcing that a new version of WordPress is available.
+* The admin-email verification screen that interrupts a login every six months.
+* The automatic-update debug email, which only goes out on beta and test builds.
 
 == Frequently Asked Questions ==
 
 = Will I still know an update is available? =
 
-Yes. The dashboard and the Updates screen are untouched; only the email is
+Yes. The Dashboard and Updates screen are untouched; only the email is
 suppressed.
 
 = Does this stop automatic updates? =
 
-No. It changes which emails you receive, nothing else. Update behavior is
-controlled by the WP_AUTO_UPDATE_CORE constant and the per-plugin auto-update
-settings, neither of which this plugin reads or writes.
+No. It changes which emails you receive, nothing else. Which updates install,
+and whether they install automatically, is controlled by the
+WP_AUTO_UPDATE_CORE constant and the per-plugin auto-update settings. This
+plugin neither reads nor writes them.
 
 = Why keep the failure emails? =
 
-A 'critical' core update failure means the site may be down. That is the one
-message worth an interruption, and a blanket suppression would discard it along
-with the routine mail.
+A critical core update failure means the site may be down. That is the one
+message worth an interruption, and a blanket suppression discards it along with
+the routine mail.
+
+= Does it work on multisite? =
+
+It is built and tested for single sites. There is no network-admin settings
+screen.
 
 == Changelog ==
+
+= 3.0.0 =
+* Add a settings screen. Every category is now chosen rather than assumed.
+* Nothing is silenced until configured; a fresh activation changes no mail.
+* Add a third choice, silencing failures too, for anyone who wants it.
+* Filters are registered only when a setting calls for one.
 
 = 2.0.0 =
 * Keep core update failures and critical failures; silence successes only.
 * Send plugin and theme digests only when an item in the run failed.
-* Silence the "WordPress x.y is available" email.
+* Silence the email announcing a new version of WordPress.
 * Disable the six-monthly admin-email verification screen.
 
 = 1.0.0 =
 * Silence plugin, theme and debug update email.
+
+== Upgrade Notice ==
+
+= 3.0.0 =
+Settings are new, and everything starts switched off. Version 2.0.0 acted on
+activation; this one waits to be told, so visit Settings > Quiet Updates after
+upgrading or no mail will be silenced.
